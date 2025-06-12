@@ -1,0 +1,144 @@
+#backButton {
+  position: absolute;
+  top: 125px;
+  right: 6px;
+  display: none;
+  z-index: 1000;
+  background-color: #f94ca4;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+#backButton:hover {
+  background-color: #d83a8e;
+}
+
+.filter-blur {
+  background: rgba(255, 255, 255, 0.632);
+  backdrop-filter: blur(30px);
+  -webkit-backdrop-filter: blur(30px);
+  border-radius: 50px;
+  border: none;
+  position: relative;
+}
+.slider-wrapper {
+  position: relative;
+  margin: auto;
+  margin-top: -200px;
+  margin-bottom: 32px;
+  width: 70%;
+  overflow: hidden;
+}
+.slider-track {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+  flex-wrap: nowrap;
+}
+
+.slide {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.dots-container {
+  text-align: center;
+  margin-top: 12px;
+  position: relative;
+  z-index: 10;
+}
+
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  background-color: #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dots-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  background-color: #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dots-container {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  margin: 0 6px;
+  background-color: #bbb;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.dot.active,
+.dot:hover {
+  background-color: #717171;
+}
+
+@media (max-width: 768px) {
+  .hero-content {
+    padding-left: 20px;
+    padding-top: 100px;
+    text-align: center;
+  }
+
+  .movie-title {
+    font-size: 16px;
+  }
+
+  .watch-trailer {
+    font-size: 20px;
+  }
+
+  .filter-blur {
+    border-radius: 20px;
+    padding: 1rem;
+  }
+
+  .slide {
+    padding: 1rem;
+  }
+}
+
+.movie-thumb {
+  border-radius: 200%;
+  background-color: black;
+  padding-bottom: 20px;
+}
+
+.movie-thumb img {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+    border-radius: 0.25rem;
+    transition: transform 0.3s ease;
+}
+
+.movie-thumb img:hover {
+    transform: scale(1.1);
+}
