@@ -6,6 +6,7 @@ use App\Models\Movie;
 use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use App\Models\Episode;
 
 class MovieController extends Controller
 {
@@ -107,6 +108,22 @@ class MovieController extends Controller
         ]);
 
         $movie->categories()->sync($validated['categories']);
+
+        if ($request->hasFile('episode_files')) {
+            foreach ($request->file('episode_files') as $index => $file) {
+                if ($file && isset($request->episode_titles[$index])) {
+                    $episodePath = $file->store('episodes', 'public');
+                    $episodeTitle = $request->episode_titles[$index];
+        
+                    // Lưu tập phim vào DB
+                    Episode::create([
+                        'movie_id' => $movie->id,
+                        'title' => $episodeTitle,
+                        'video_path' => $episodePath,
+                    ]);
+                }
+            }
+        }
 
         return redirect()->route('movies.show', $movie)
             ->with('success', 'Phim đã được cập nhật thành công.');

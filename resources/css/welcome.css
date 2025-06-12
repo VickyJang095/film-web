@@ -133,7 +133,7 @@
 
 .movie-thumb img {
     width: 100%;
-    height: 280px;
+    height: 400px;
     object-fit: cover;
     border-radius: 0.25rem;
     transition: transform 0.3s ease;

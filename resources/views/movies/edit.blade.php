@@ -26,7 +26,7 @@
 
             {{-- Mô tả --}}
             <div class="mb-4">
-                <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1 ,e-4">Mô
+                <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1 me-4">Mô
                     tả</label>
                 <textarea name="description" id="description" rows="4"
                     class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 
@@ -65,21 +65,19 @@
             </div>
 
             {{-- Thể loại --}}
-            <div class="mb-4">
-                <label for="categories" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1 me-4">Thể
-                    loại</label>
-                <select name="categories[]" id="categories" multiple class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
-                           @error('categories') border-red-500 @enderror
-                           dark:bg-gray-800 text-gray-900 dark:text-white">
+            <div class="space-y-2 mb-4">
+                <label for="category_id" class="block text-sm font-semibold text-gray-700 me-4">Thể loại</label>
+                <select name="category_id" id="category_id"
+                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 @error('category_id') border-red-500 @enderror">
+                    <option value="">-- Chọn thể loại --</option>
                     @foreach($categories as $category)
-                    <option value="{{ $category->id }}"
-                        {{ in_array($category->id, old('categories', $movie->categories->pluck('id')->toArray())) ? 'selected' : '' }}>
+                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
                         {{ $category->name }}
                     </option>
                     @endforeach
                 </select>
-                @error('categories')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                @error('category_id')
+                <p class="text-sm text-red-600">{{ $message }}</p>
                 @enderror
             </div>
 
@@ -104,7 +102,7 @@
             {{-- Video --}}
             <div class="mb-4">
                 <label for="video"
-                    class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Video</label>
+                    class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Video trailer</label>
                 @if($movie->video_path)
                 <div class="mb-3">
                     <video controls class="w-full rounded-xl">
@@ -121,19 +119,62 @@
                 @enderror
             </div>
 
-            {{-- Buttons --}}
-            <div class="flex justify-end gap-4 pt-4 border-t mt-6 mb-4">
+            {{-- Tập phim --}}
+            <div class="mb-6">
+                <label for="episodes" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Đăng tải tập phim</label>
+
+                <div id="episode-list" class="space-y-4">
+                    <div class="flex items-center gap-4">
+                        <input type="text" name="episode_titles[]" placeholder="Tên tập phim"
+                            class="w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
+                                dark:bg-gray-800 text-gray-900 dark:text-white">
+                        <input type="file" name="episode_files[]" accept="video/mp4"
+                            class="w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
+                                dark:bg-gray-800 text-gray-900 dark:text-white">
+                    </div>
+                </div>
+
+                <button type="button" id="add-episode"
+                    class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
+                    + Thêm tập mới
+                </button>
+            </div>
+
+
+            {{-- Nút --}}
+            <div class="flex justify-end gap-4 pt-4 border-t mt-3 me-4 mb-4">
                 <a href="{{ route('movies.show', $movie) }}"
-                    class="inline-block px-4 py-2 text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-500 hover:underline transition duration-150 rounded-lg border border-gray-400">
+                    class="inline-block px-4 py-2 text-gray-600 text-decoration-none hover:text-blue-600 hover:underline transition duration-150">
                     Hủy
                 </a>
-                <button type="submit"
-                class="btn inline-block px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition duration-150"
-                style="background: linear-gradient(90deg, #f94ca4, #f14668);">
-                    Cập nhật phim
+                <button type=" submit"
+                    class="btn inline-block px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition duration-150"
+                    style="background: linear-gradient(90deg, #f94ca4, #f14668);">
+                    Update
                 </button>
             </div>
         </form>
     </div>
+    @push('scripts')
+<script>
+    document.getElementById('add-episode').addEventListener('click', function () {
+        const list = document.getElementById('episode-list');
+
+        const item = document.createElement('div');
+        item.className = 'flex items-center gap-4';
+
+        item.innerHTML = `
+            <input type="text" name="episode_titles[]" placeholder="Tên tập phim"
+                class="w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
+                       dark:bg-gray-800 text-gray-900 dark:text-white">
+            <input type="file" name="episode_files[]" accept="video/mp4"
+                class="w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
+                       dark:bg-gray-800 text-gray-900 dark:text-white">
+        `;
+
+        list.appendChild(item);
+    });
+</script>
+@endpush
 </div>
 @endsection

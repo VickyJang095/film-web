@@ -135,6 +135,40 @@
         background: rgba(255, 255, 255, 0.2);
         color: white;
     }
+
+    .watch-trailer-btn, .watch-full-btn {
+        display: inline-block;
+        border-radius: 25px;
+        padding: 12px 30px;
+        transition: all 0.3s ease-in-out;
+        text-align: center;
+        text-transform: uppercase;
+        white-space: nowrap;
+    }
+
+
+    .watch-trailer-btn:hover {
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        color: white;
+        transform: scale(1.05);
+        box-shadow: 0 4px 15px rgba(255, 255, 255, 0.1);
+    }
+
+    .watch-full-btn {
+        background: linear-gradient(90deg, #f94ca4, #f14668);
+        padding: 12px 30px;
+        color: white;
+        border: none;
+        box-shadow: 0 4px 12px rgba(249, 76, 164, 0.3);
+    }
+
+    .watch-full-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 18px rgba(249, 76, 164, 0.5);
+        color: white;
+    }
+
     </style>
 </head>
 
@@ -220,14 +254,14 @@
                             </p>
                             <p class="text-muted">{{ Str::limit($movie->description, 150) }}</p>
                             <div class="d-flex gap-3 mt-3">
-                                <a href="#" class="text-primary fw-semibold text-decoration-none px-3 py-2"
+                                <a href="#" class="text-primary fw-semibold text-decoration-none px-3 py-2 watch-trailer-btn"
                                     data-trailer="{{ $movie->video_path }}">
-                                    <i class="fas fa-film"></i> WATCH TRAILER
+                                    <i class="fas fa-film"></i> Xem Trailer
                                 </a>
                                 <a href="{{ route('movies.show', $movie) }}"
-                                    class="btn text-white px-3 py-2 rounded-4 shadow"
+                                    class="btn text-white px-3 py-2 rounded-4 shadow watch-full-btn"
                                     style="background: linear-gradient(90deg, #f94ca4, #f14668);">
-                                    <i class="fas fa-play"></i> WATCH FULL MOVIE
+                                    <i class="fas fa-play"></i> Xem Phim
                                 </a>
                             </div>
                         </div>
@@ -254,6 +288,7 @@
     <x-phim-moi></x-phim-moi>
     <x-movie-trending></x-movie-trending>
     <x-phim-bo></x-phim-bo>
+    <x-phim-le></x-phim-le>
 
     <footer class="text-white py-4 mt-5" style="background-color:black;">
         <div class="container">
