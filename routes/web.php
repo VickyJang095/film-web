@@ -32,6 +32,7 @@ Route::get('/movies/latest', [MovieController::class, 'latest'])->name('movies.l
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/country/{slug}', [CountryController::class, 'show'])->name('country.show');
 
+
 // Routes cho người dùng đã đăng nhập (ngoại trừ dashboard)
 Route::middleware(['auth', 'verified'])->group(function () {
     // Profile

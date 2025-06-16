@@ -19,7 +19,14 @@ class MovieController extends Controller
     public function show(Movie $movie)
     {
         $movie->load(['categories', 'comments.user']);
-        return view('movies.show', compact('movie'));
+        $relatedMovies = Movie::whereHas('categories', function($q) use ($movie) {
+            return $q->whereIn('categories.id', $movie->categories->pluck('id'));
+        })
+        ->where('id', '!=', $movie->id)
+        ->latest()
+        ->take(12)
+        ->get();        
+        return view('movies.show', compact('movie', 'relatedMovies'));
     }
 
     public function create()

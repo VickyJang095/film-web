@@ -1,74 +1,250 @@
-<!DOCTYPE html>
-<html lang="vi">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Đăng nhập - Film Web</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-</head>
-<body class="bg-gray-100">
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="max-w-md w-full space-y-8 p-8 bg-white rounded-lg shadow-lg">
-            <div>
-                <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                    Đăng nhập
-                </h2>
-                <p class="mt-2 text-center text-sm text-gray-600">
-                    Hoặc
-                    <a href="{{ route('register') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
-                        đăng ký tài khoản mới
-                    </a>
-                </p>
+<x-guest-layout>
+<style>
+    .container{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 75%;
+        height: 550px;
+        background: url('/images/background.jpg') no-repeat;
+        background-size: cover;
+        background-position: center;
+        border-radius: 20px;
+        margin-top: 20px;
+    }   
+    
+    .container .content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 50%;
+        height: 100%;
+        padding: 70px;
+        color: #e4e4e4;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-start; 
+    }
+
+    .container .logreg-box {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: calc(100% - 58%);
+        height: 100%;
+    }
+
+    .container .logo {
+        font-size: 30px;
+    }
+
+    .content h2 {
+        font-size: 30px;
+        margin-top: -20px;
+    }
+
+    .content .title {
+        margin-bottom: 200px; 
+    }
+
+    .text-sci h2 {
+        font-size: 40px;
+        line-height: 1;
+    }
+
+    .text-sci h2 span {
+        font-size: 25px; 
+    }
+
+    .text-sci p {
+        font-size: 16px;
+        margin: 20px 0;
+    }
+
+    .social-icons a i{
+        font-size: 22px;
+        color: #e4e4e4;
+        margin-right: 10px;
+        transition: .5s ease;
+    }
+
+    .social-icons a:hover i {
+        transform: scale(1.2);
+    }
+
+    .logreg-box .form-box {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        backdrop-filter: blur(20px);
+        border-top-right-radius: 20px;
+        border-bottom-right-radius: 20px;
+        color: #e4e4e4;
+    }
+
+    .form-box h2 {
+        font-size: 32px;
+        text-align: center;
+    }
+
+    .form-box .input-box {
+        position: relative;
+        width: 340px;
+        height: 50px;
+        border-bottom: 2px solid #e4e4e4;
+        margin: 30px 0;
+    }
+
+    .input-box input {
+        width: 100%;
+        height: 100%;
+        background: transparent;
+        border: none;
+        outline: none;
+        margin-top: 5px;
+        font-size: 18px;
+        color: #e4e4e4;
+        font-weight: 300;
+    }
+
+    .input-box label {
+        position: absolute;
+        top: 50%;
+        left: 0;
+        transform: translate(-5%);
+        font-size: 18px;
+        font-weight: 300;
+        pointer-events: none;
+        transition: .5s ease;
+    }
+
+    .input-box input:focus~label,
+    .input-box input:valid~label {
+        top: -5px;
+    }
+
+    .input-box .icon {
+        position: absolute;
+        right: 0;
+        top: 13px;
+        font-size: 19px;
+    }
+
+    .form-box .remember-forgot {
+        font-size: 14.5px;
+        font-weight: 300;
+        margin: -15px 0 15px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .remember-forgot label input {
+        accent-color: #e4e4e4;
+        margin-right: 3px;
+    }
+
+    .remember-forgot a {
+        color: #e4e4e4;
+        text-decoration: none;
+    }
+
+    .remember-forgot a:hover {
+        text-decoration: underline;
+    }
+
+    .btn {
+        width: 100%;
+        height: 45px;
+        background: linear-gradient(90deg, #f94ca4, #f14668);
+        border-radius: 20px;
+        color:#e4e4e4;
+        border: none;
+        outline: none;
+        font-weight: 300;
+        box-shadow: 0 0 10px rgba(0, 0, 0, .5);
+    }
+    
+    .btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 18px rgba(249, 76, 164, 0.5);
+        color: white;
+    }
+
+    .form-box .login-register {
+        font-size: 14.5px;
+        text-align: center;
+        font-weight: 300;
+        margin-top: 25px;
+    }
+
+    .login-register p a {
+        color: #e4e4e4;
+        font-weight: 400;
+        text-decoration: none;
+    }
+    .login-register p a:hover { 
+        text-decoration: underline;
+    }
+</style>
+
+<div class="container vh-100 d-flex justify-content-center align-items-center">
+    <div class="content">
+        <h2 class="title"><i class='bx bx-play-circle' class="logo"></i> Film Web</h2>
+
+        <div class="text-sci">
+            <h2>Welcome<br><span>To My Website.</span></h2>
+            
+            <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Perspiciatis asperiores quidem aut similique enim quae omnis pariatur itaque velit dolor sint deleniti rerum, sunt quam suscipit quasi, tempora accusantium. Excepturi.</p>
+
+            <div class="social-icons">
+                <a href="#"><i class='bx bxl-linkedin'></i></a>
+                <a href="#"><i class='bx bxl-facebook'></i></a>
+                <a href="#"><i class='bx bxl-instagram'></i></a>
+                <a href="#"><i class='bx bxl-twitter'></i></a>
             </div>
+        </div>
+    </div>
 
-            <form class="mt-8 space-y-6" method="POST" action="{{ route('login') }}">
+    <div class="logreg-box">
+        <div class="form-box login">
+            <form method="POST" action="{{ route('login') }}">
                 @csrf
+                <h2>Sign In</h2>
 
-                <div class="rounded-md shadow-sm -space-y-px">
-                    <div>
-                        <label for="email" class="sr-only">Email</label>
-                        <input id="email" name="email" type="email" required 
-                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm @error('email') border-red-500 @enderror"
-                            placeholder="Email" value="{{ old('email') }}">
-                        @error('email')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-                    <div>
-                        <label for="password" class="sr-only">Mật khẩu</label>
-                        <input id="password" name="password" type="password" required 
-                            class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm @error('password') border-red-500 @enderror"
-                            placeholder="Mật khẩu">
-                        @error('password')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
+                <div class="input-box">
+                    <span class="icon"><i class="bx bxs-envelope"></i></span>
+                    <input type="email" name="email" required value="{{ old('email') }}">
+                    <label>Email</label>
+                    @error('email')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
 
-                <div class="flex items-center justify-between">
-                    <div class="flex items-center">
-                        <input id="remember_me" name="remember" type="checkbox" 
-                            class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
-                        <label for="remember_me" class="ml-2 block text-sm text-gray-900">
-                            Ghi nhớ đăng nhập
-                        </label>
-                    </div>
-
-                    <div class="text-sm">
-                        <a href="{{ route('password.request') }}" class="font-medium text-indigo-600 hover:text-indigo-500">
-                            Quên mật khẩu?
-                        </a>
-                    </div>
+                <div class="input-box">
+                    <span class="icon"><i class="bx bxs-lock-alt"></i></span>
+                    <input type="password" name="password" required>
+                    <label>Password</label>
+                    @error('password')
+                        <small class="text-danger">{{ $message }}</small>
+                    @enderror
                 </div>
 
-                <div>
-                    <button type="submit" 
-                        class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                        Đăng nhập
-                    </button>
+                <div class="remember-forgot">
+                    <label><input type="checkbox" name="remember">Remember me</label>
+                    <a href="{{ route('password.request') }}">Forgot password?</a>
+                </div>
+
+                <button type="submit" class="btn rounded-4">Sign In</button>
+
+                <div class="login-register">
+                    <p>Don't have an account?<a href="{{route('register')}}" class="register-link">  Sign Up</a></p>
                 </div>
             </form>
         </div>
     </div>
-</body>
-</html>
+</div>
+</x-guest-layout>
