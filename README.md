@@ -96,6 +96,10 @@ VD: Hiển thị phim theo thể loại
 ---
 ## Chức năng chính của dự án
 
+- CRUD phim
+<img width="400" alt="demo" src="https://github.com/user-attachments/assets/45da2a85-2559-4c0f-a302-4707b51a2f50" />
+<img width="402" alt="demo1" src="https://github.com/user-attachments/assets/866031ed-623d-4335-989b-234f8091c0fa" />
+<img width="403" alt="demo2" src="https://github.com/user-attachments/assets/a8f8ae5c-09e6-43e9-9903-e76df5d59d72" />
 
 
 ### Công Nghệ
@@ -165,6 +169,7 @@ php artisan serve
 **Tài khoản admin:**
 - Admin: admin@example.com / password
 - User: user@example.com / password
+  
 **Tích hợp:** Laravel Breeze + Sanctum (xác thực), Bootstrap (UI)
 
 ## Cấu trúc thư mục
