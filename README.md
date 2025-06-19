@@ -98,11 +98,23 @@ VD: Hiển thị phim theo thể loại
 ## Chức năng chính của dự án
 
 - CRUD phim
-<img width="400" alt="demo" src="https://github.com/user-attachments/assets/45da2a85-2559-4c0f-a302-4707b51a2f50" /> UPDATE 
+
+<img width="400" alt="demo" src="https://github.com/user-attachments/assets/45da2a85-2559-4c0f-a302-4707b51a2f50" />
+
 <img width="402" alt="demo1" src="https://github.com/user-attachments/assets/866031ed-623d-4335-989b-234f8091c0fa" />
+
 <img width="403" alt="demo2" src="https://github.com/user-attachments/assets/a8f8ae5c-09e6-43e9-9903-e76df5d59d72" />
-<img width="319" alt="demo3" src="https://github.com/user-attachments/assets/e383977d-ad9c-4663-8e4e-bdf26aedbf89" /> CREATE
-<img width="912" alt="demo4" src="https://github.com/user-attachments/assets/c762edc7-43b9-420a-a5ab-c24177e8de97" /> DELETE & READ
+
+ UPDATE 
+
+<img width="319" alt="demo3" src="https://github.com/user-attachments/assets/e383977d-ad9c-4663-8e4e-bdf26aedbf89" /> 
+
+CREATE
+
+<img width="912" alt="demo4" src="https://github.com/user-attachments/assets/c762edc7-43b9-420a-a5ab-c24177e8de97" /> 
+
+DELETE & READ
+
  ## Code minh họa MovieController
  ```bash
 <?php
