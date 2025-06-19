@@ -58,6 +58,14 @@ Giao diện thân thiện, dễ sử dụng, phù hợp cho cả người quản
 ![Untitled](https://github.com/user-attachments/assets/d0541f63-56df-4fd6-b0af-d6c29b5c4f0c)
 
 ---
+## Sơ đồ cấu trúc 
+
+![dP7FIiH03CRlVOhGao9xs6iFik0BUF6yX9cnE-pygKa6MSHtTrf76nKfxAKaNt_vleGvi219YQ4p0PdXYHt1MmTmv-q0FibS9enk01RoQPnx5z47BKnrz3MJrHhbu7GVykZJpMqhSv5QltSjzf6oBKOsawrZGtuIdzEFVFAcSiyXeymzIpRdnMIDU2XLZLTTTyff9Nxl_A_lzF](https://github.com/user-attachments/assets/86248f5c-eda7-4bbf-a14f-8a9cb0884f60)
+
+## Sơ đồ thuật toán
+VD: Hiển thị phim theo thể loại
+
+![image](https://github.com/user-attachments/assets/96eb62b9-36ef-4713-9517-dfeb901c7181)
 
 ## Lớp trọng điểm
 
@@ -86,6 +94,9 @@ Giao diện thân thiện, dễ sử dụng, phù hợp cho cả người quản
 | `CountryController`  | `app/Http/Controllers/CountryController.php`  | Quản lý quốc gia sản xuất phim                                            |
 
 ---
+## Chức năng chính của dự án
+
+
 
 ### Công Nghệ
 | **Công nghệ**                | **Vai trò**                                                                 |
