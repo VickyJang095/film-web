@@ -6,8 +6,8 @@
     <div class="row text-white rounded shadow p-4">
         <!-- Poster -->
         <div class="col-md-4 text-center mb-3">
-            <img src="{{ $movie->poster_path }}" alt="{{ $movie->title }}" class="img-fluid rounded shadow"
-                style="width: 80%; height: 450px; object-fit: cover;">
+            <img src="{{ asset('storage/' . $movie->poster_path) }}" alt="{{ $movie->title }}"
+                class="img-fluid rounded shadow" style="width: 80%; height: 450px; object-fit: cover;">
         </div>
 
         <!-- Nội dung -->
@@ -29,22 +29,39 @@
                         </button>
                     </form>
                 </div>
-
                 @endif
             </div>
 
             <div class="mb-3">
                 <span class="badge bg-secondary">{{ $movie->release_year }}</span>
                 <span class="badge bg-secondary">{{ $movie->duration }} phút</span>
-                <span class="badge bg-secondary">{{ $movie->type === 'movie' ? 'Phim lẻ' : 'Phim bộ' }}</span>
+                <span class="badge bg-secondary">{{ $movie->type === 'single' ? 'Phim lẻ' : 'Phim bộ' }}</span>
                 <span class="badge bg-secondary">{{ $movie->country->name }}</span>
             </div>
 
             <p class="text-light">{{ $movie->description }}</p>
 
-            <div class="mb-3">
-                <span class="text-warning fw-bold">★ {{ number_format($movie->rating, 1) }}</span>
-                <span class="text-light ms-4">👁 {{ number_format($movie->views) }} lượt xem</span>
+            <div class="d-flex flex-column align-items-start">
+                {{-- Hiển thị điểm trung bình --}}
+                <div class="d-flex align-items-center gap-2">
+                    <span class="fs-5 fw-bold text-warning"
+                        style="font-size: 12px;">{{ number_format($movie->rating, 1) }}/10</span>
+                    <span class="ms-3 text-light">👁 {{ number_format($movie->views) }} lượt xem</span>
+                </div>
+
+                {{-- Hiển thị form đánh giá nếu người dùng đã đăng nhập --}}
+                @auth
+                <form action="{{ route('movies.rate', $movie->id) }}" method="POST" id="rating-form" class="mt-2">
+                    @csrf
+                    <input type="hidden" name="rating" id="rating-value">
+                    <div class="fs-4 text-secondary" id="star-container" style="cursor: pointer;">
+                        @for($i = 1; $i <= 10; $i++) <i class="fas fa-star star" style="font-size: 12px;"
+                            data-value="{{ $i }}"></i>
+                            @endfor
+                    </div>
+                    <small id="rating-hint" class="text-light d-block mt-2"></small>
+                </form>
+                @endauth
             </div>
 
             <div>
@@ -53,23 +70,36 @@
                 <span class="badge" style="background-color: #f94ca4;">{{ $category->name }}</span>
                 @endforeach
             </div>
+
+            <div class="d-flex gap-3 mt-3">
+                <a href="#" class="text-primary fw-semibold text-decoration-none px-3 py-2 watch-trailer-btn"
+                    data-trailer="{{ $movie->video_path }}">
+                    <i class="fas fa-film"></i> Xem Trailer
+                </a>
+                <a href="{{ route('movies.show', $movie) }}"
+                    class="btn text-white px-3 py-2 rounded-4 shadow watch-full-btn"
+                    style="background: linear-gradient(90deg, #f94ca4, #f14668);">
+                    <i class="fas fa-play"></i> Xem Phim
+                </a>
+            </div>
         </div>
     </div>
 
+
     <!-- DANH SÁCH TẬP PHIM -->
-    @if($movie->type === 'series')
     <div class="my-5">
         <h4 class="fw-bold text-white mb-3">Danh sách tập phim</h4>
         <div class="row g-3">
             @foreach($movie->episodes()->orderBy('episode_number')->get() as $episode)
             <div class="col-6 col-md-4 col-lg-2 mb-3">
                 <a href="{{ route('episode.show', ['movie' => $movie->slug, 'episode' => $episode->id]) }}"
-                    class="btn btn-outline-dark w-100 text-white">Tập {{ $episode->episode_number }}</a>
+                    class="btn btn-outline-dark w-100 text-white">
+                    Tập {{ $episode->episode_number }}
+                </a>
             </div>
             @endforeach
         </div>
     </div>
-    @endif
 
     @if($relatedMovies->count())
     <!-- PHIM CÙNG THỂ LOẠI -->
@@ -89,8 +119,8 @@
                 <div class="card bg-dark text-white rounded-4 shadow-lg w-100 position-relative movie-card movie-thumb"
                     style="overflow: hidden; transition: transform 0.3s ease;">
                     <div class="overflow-hidden" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
-                        <img src="{{ $movie->poster_path }}" alt="{{ $movie->title }}" class="img-fluid movie-poster"
-                            style="transition: transform 0.3s;">
+                        <img src="{{ asset('storage/' . $movie->poster_path) }}" alt="{{ $movie->title }}"
+                            class="img-fluid movie-poster" style="transition: transform 0.3s;">
                     </div>
 
                     <div class="card-body d-flex flex-column justify-content-between">
@@ -192,4 +222,48 @@
         opacity: 1;
     }
 }
+
+.star {
+    transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.star:hover {
+    transform: scale(1.2);
+    color: #ffc107;
+}
 </style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const stars = document.querySelectorAll('.star');
+    const ratingValue = document.getElementById('rating-value');
+    const ratingForm = document.getElementById('rating-form');
+    const ratingHint = document.getElementById('rating-hint');
+
+    let currentRating = 0;
+
+    stars.forEach(star => {
+        star.addEventListener('mouseover', () => {
+            highlightStars(star.dataset.value);
+        });
+
+        star.addEventListener('mouseout', () => {
+            highlightStars(currentRating);
+        });
+
+        star.addEventListener('click', () => {
+            currentRating = star.dataset.value;
+            ratingValue.value = currentRating;
+            ratingHint.textContent = `Bạn đã đánh giá ${currentRating}/10 ★`;
+            ratingForm.submit();
+        });
+    });
+
+    function highlightStars(count) {
+        stars.forEach(star => {
+            star.classList.toggle('text-warning', star.dataset.value <= count);
+            star.classList.toggle('text-secondary', star.dataset.value > count);
+        });
+    }
+});
+</script>

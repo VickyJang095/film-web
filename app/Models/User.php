@@ -40,11 +40,38 @@ class User extends Authenticatable
      *
      * @return array<string, string>
      */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    public function watchedMovies()
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->belongsToMany(Movie::class, 'movie_user', 'user_id', 'movie_id')
+            ->withTimestamps();
+    }
+
+    public function favoriteMovies()
+    {
+        return $this->belongsToMany(Movie::class, 'favorites', 'user_id', 'movie_id')
+            ->withTimestamps();
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
+
+    public function ratings()
+    {
+        return $this->hasMany(Rating::class);
+    }
+
+    /**
+     * Kiểm tra xem người dùng có phải là admin không
+     */
+    public function isAdmin(): bool
+    {
+        return $this->role === 'admin';
     }
 }

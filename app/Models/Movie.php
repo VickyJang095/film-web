@@ -7,6 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
+
 
 class Movie extends Model
 {
@@ -14,38 +16,37 @@ class Movie extends Model
 
     protected $fillable = [
         'title',
+        'slug',
         'description',
-        'duration',
         'release_year',
-        'rating',
-        'subtitle',
-        'trailer_url',
-        'poster_url',
-        'video_url',
-        'category_id',
-        'country_id',
+        'duration',
         'poster_path',
         'video_path',
-        'episodes',
         'type',
+        'country_id',
         'status',
-        'views'
+        'views',
+        'rating',
+        'rating_count'
     ];
 
     protected $casts = [
         'release_year' => 'integer',
         'duration' => 'integer',
+        'episodes' => 'integer',
         'views' => 'integer',
-        'rating' => 'float'
+        'rating' => 'float',
+        'rating_count' => 'integer',
+        'type' => 'string'
     ];
 
     // Relationships
-    public function country(): BelongsTo
+    public function country()
     {
         return $this->belongsTo(Country::class);
     }
 
-    public function categories(): BelongsToMany
+    public function categories()
     {
         return $this->belongsToMany(Category::class, 'movie_category');
     }
@@ -53,7 +54,12 @@ class Movie extends Model
     /**
      * Lấy các tập phim của bộ phim này
      */
-    public function episodes(): HasMany
+    public function episodes()
+    {
+        return $this->hasMany(Episode::class);
+    }
+
+    public function episodeList(): HasMany
     {
         return $this->hasMany(Episode::class);
     }
@@ -66,5 +72,22 @@ class Movie extends Model
     public function ratings()
     {
         return $this->hasMany(Rating::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($movie) {
+            if (empty($movie->slug)) {
+                $movie->slug = Str::slug($movie->title);
+            }
+        });
+
+        static::updating(function ($movie) {
+            if ($movie->isDirty('title')) {
+                $movie->slug = Str::slug($movie->title);
+            }
+        });
     }
 }

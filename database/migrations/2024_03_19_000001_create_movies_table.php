@@ -18,13 +18,15 @@ return new class extends Migration
             $table->string('poster_path')->nullable();
             $table->string('video_path')->nullable();
             $table->integer('episodes')->default(0);
-            $table->enum('type', ['movie', 'series'])->default('movie');
+            $table->enum('type', ['single', 'series'])->default('single');
             $table->foreignId('country_id')->constrained()->onDelete('cascade');
             $table->enum('status', ['draft', 'published'])->default('draft');
             $table->integer('views')->default(0);
             $table->float('rating')->default(0);
+            $table->integer('rating_count')->default(0);
             $table->timestamps();
         });
+
         Schema::create('movie_category', function (Blueprint $table) {
             $table->id();
             $table->foreignId('movie_id')->constrained()->onDelete('cascade');
@@ -35,7 +37,7 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('movies');
         Schema::dropIfExists('movie_category');
+        Schema::dropIfExists('movies');
     }
 }; 

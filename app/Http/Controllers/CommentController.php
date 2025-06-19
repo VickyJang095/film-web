@@ -12,7 +12,7 @@ class CommentController extends Controller
     public function store(Request $request, Movie $movie)
     {
         $request->validate([
-            'content' => 'required|min:3|max:1000'
+            'content' => 'required|string|max:1000'
         ]);
 
         $movie->comments()->create([
@@ -20,7 +20,7 @@ class CommentController extends Controller
             'content' => $request->content
         ]);
 
-        return back()->with('success', 'Bình luận đã được thêm thành công!');
+        return redirect()->back()->with('success', 'Bình luận đã được đăng!');
     }
 
     public function destroy(Comment $comment)

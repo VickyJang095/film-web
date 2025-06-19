@@ -36,7 +36,7 @@ class MovieSeeder extends Seeder
                 'poster_path' => 'https://m.media-amazon.com/images/M/MV5BZWFiOGJhNjEtOWFjNy00OTY4LWIyMzktOWNiNDA1ODUxOTljXkEyXkFqcGc@._V1_.jpg',
                 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 'episodes' => 1,
-                'type' => 'movie',
+                'type' => 'single',
                 'country_id' => 2, // Mỹ
                 'status' => 'published',
                 'views' => 800,
@@ -64,7 +64,7 @@ class MovieSeeder extends Seeder
                 'poster_path' => 'https://cdn11.bigcommerce.com/s-65f8qukrjx/images/stencil/800w/products/6415/17096/Liu_The_Dark_Forest_cover__60325.1687451114.jpg?c=1',
                 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 'episodes' => 1,
-                'type' => 'movie',
+                'type' => 'single',
                 'country_id' => 2, // Mỹ
                 'status' => 'published',
                 'views' => 500,
@@ -78,7 +78,7 @@ class MovieSeeder extends Seeder
                 'poster_path' => 'https://m.media-amazon.com/images/M/MV5BMzkyNzQ1Mzc0NV5BMl5BanBnXkFtZTcwODg3MzUzMw@@._V1_FMjpg_UX1000_.jpg',
                 'video_path' => 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
                 'episodes' => 1,
-                'type' => 'movie',
+                'type' => 'single',
                 'country_id' => 3, // Nhật Bản
                 'status' => 'published',
                 'views' => 1200,

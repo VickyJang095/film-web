@@ -1,16 +1,26 @@
-<!-- PHIM BỘ Title -->
+@extends('layouts.app')
+
+@section('content')
+
+<!-- TIÊU ĐỀ QUỐC GIA -->
 <div class="container text-center pt-5">
     <div class="row justify-content-start">
         <span class="col-auto phim-bo-btn shadow d-flex align-items-center gap-2">
-            <i class="fas fa-film"></i> <a href="#" class="text-decoration-none text-white">PHIM BỘ</a>
+            <i class="fas fa-globe-asia"></i>
+            <a href="#" class="text-decoration-none text-white">QUỐC GIA {{ strtoupper($country->name) }}</a>
         </span>
     </div>
 </div>
 
-<!-- Danh sách PHIM BỘ -->
-<div class="container pt-2">
+<!-- DANH SÁCH PHIM -->
+<div class="container pt-4">
+    @if($movies->isEmpty())
+        <div class="text-center py-5">
+            <p class="text-muted fs-5">Chưa có phim nào thuộc quốc gia này.</p>
+        </div>
+    @else
     <div class="row g-4">
-        @foreach ($series as $movie)
+        @foreach ($movies as $movie)
         <div class="col-12 col-sm-6 col-md-4 col-lg-3 d-flex">
             <div class="card bg-dark text-white rounded-4 shadow-lg w-100 position-relative movie-card movie-thumb"
                 style="overflow: hidden; transition: transform 0.3s ease;">
@@ -24,7 +34,7 @@
                     <h5 class="card-title mt-2">{{ $movie->title }}</h5>
                     <p class="text-muted small mb-1">{{ $movie->categories->pluck('name')->join(', ') }}</p>
                     <p class="small">⭐ Rating: {{ $movie->rating }}/10</p>
-                    <p class="small mb-3">Số tập: {{ $movie->episodes}}</p>
+                    <p class="small mb-3">Năm: {{ $movie->release_year }}</p>
                     <a href="{{ route('movies.show', $movie) }}" target="_blank"
                     class="btn text-white px-3 py-2 rounded-4 shadow"
                     style="background: linear-gradient(90deg, #f94ca4, #f14668);">Xem Phim</a>
@@ -33,6 +43,7 @@
         </div>
         @endforeach
     </div>
+    @endif
 </div>
 
 <!-- FontAwesome nếu chưa có -->
@@ -48,7 +59,7 @@
     transform: scale(1.08);
 }
 
-/* Nút PHIM BỘ */
+/* Nút tiêu đề */
 .phim-bo-btn {
     font-size: 24px;
     padding: 12px 20px;
@@ -81,3 +92,5 @@
     100% { transform: scale(1.1); opacity: 1; }
 }
 </style>
+
+@endsection

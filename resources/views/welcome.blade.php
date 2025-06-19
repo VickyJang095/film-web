@@ -2,7 +2,8 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Language" content="vi">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}" />
     <title>Film Web</title>
@@ -271,7 +272,7 @@
                         <div class="col-md-5 text-center position-relative p-3">
                             <div class="rounded-4 overflow-hidden shadow justify-content-center align-items-center"
                                 style="max-width: 200px; margin: auto;">
-                                <img src="{{ $movie->poster_path }}" alt="{{ $movie->title }}"
+                                <img src="{{ asset('storage/' . $movie->poster_path) }}" alt="{{ $movie->title }}"
                                     class="img-fluid rounded-4">
                             </div>
                         </div>

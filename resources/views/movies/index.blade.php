@@ -31,7 +31,7 @@
             @foreach ($movies as $movie)
             <div class="col-12 col-sm-6 col-md-3 mb-4 d-flex" style="margin-left: -14px;">
                 <div class="rounded-4 text-center movie-thumb text-white p-3 w-100 d-flex flex-column h-100">
-                    <img src="{{ $movie->poster_path }}" alt="{{ $movie->title }}"
+                    <img src="{{ asset('storage/' . $movie->poster_path) }}" alt="{{ $movie->title }}"
                         class="img-fluid rounded-3 mb-3 flex-shrink-0">
                     <p class="text-muted large mb-2">{{ $movie->title }}</p>
                     <p class="medium mb-1">{{ $movie->categories->pluck('name')->join(', ') }}</p>

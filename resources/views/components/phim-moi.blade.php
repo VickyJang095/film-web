@@ -15,7 +15,7 @@
             <div class="card bg-dark text-white rounded-4 shadow-lg w-100 position-relative movie-card movie-thumb"
                 style="overflow: hidden; transition: transform 0.3s ease;">   
                 <div class="overflow-hidden" style="border-top-left-radius: 1rem; border-top-right-radius: 1rem;">
-                    <img src="{{ $movie->poster_path }}" alt="{{ $movie->title }}"
+                    <img src="{{ asset('storage/' . $movie->poster_path) }}" alt="{{ $movie->title }}"
                         class="img-fluid movie-poster" style="transition: transform 0.3s;">
                 </div>
 

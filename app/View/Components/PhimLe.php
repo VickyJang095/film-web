@@ -12,7 +12,7 @@ class PhimLe extends Component
     public $movie;
     public function __construct()
     {
-        $this->movie = Movie::where('type', 'movie')->take(4)->get();
+        $this->movie = Movie::where('type', 'single')->take(4)->get();
     }
 
     /**

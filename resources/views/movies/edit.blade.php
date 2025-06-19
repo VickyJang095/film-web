@@ -1,180 +1,261 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container mx-auto px-4 py-10 mt-5">
-    <div class="max-w-3xl mx-auto rounded-xl shadow-lg p-8 dark:bg-gray-900">
-        <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-6 flex items-start gap-3">
-            <i class="fas fa-edit text-blue-500"></i> Chỉnh sửa phim
-        </h1>
+<div class="container py-5 mt-4">
+    <div class="card shadow rounded-lg p-4 mx-auto" style="max-width: 800px; background-color: #1a1a2e;">
+        <h3 class="mb-4 text-center text-white fw-bold">Chỉnh sửa phim</h3>
 
-        <form action="{{ route('movies.update', $movie) }}" method="POST" enctype="multipart/form-data"
-            class="space-y-6">
+        <form action="{{ route('movies.update', $movie) }}" method="POST" enctype="multipart/form-data" id="update-movie-form">
             @csrf
             @method('PUT')
 
             {{-- Tên phim --}}
-            <div class="mb-4">
-                <label for="title" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1 me-4">Tên
-                    phim</label>
-                <input type="text" name="title" id="title" value="{{ old('title', $movie->title) }}" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 
-                           @error('title') border-red-500 @enderror
-                         dark:bg-gray-800 text-gray-900 dark:text-white">
+            <div class="mb-3">
+                <label for="title" class="form-label text-white">Tên phim</label>
+                <input type="text" name="title" id="title" value="{{ old('title', $movie->title) }}"
+                    class="form-control bg-dark text-white @error('title') is-invalid @enderror" required>
                 @error('title')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
             {{-- Mô tả --}}
-            <div class="mb-4">
-                <label for="description" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1 me-4">Mô
-                    tả</label>
+            <div class="mb-3">
+                <label for="description" class="form-label text-white">Mô tả</label>
                 <textarea name="description" id="description" rows="4"
-                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 
-                           @error('description') border-red-500 @enderror
-                           dark:bg-gray-800 text-gray-900 dark:text-white">{{ old('description', $movie->description) }}</textarea>
+                    class="form-control bg-dark text-white @error('description') is-invalid @enderror"
+                    required>{{ old('description', $movie->description) }}</textarea>
                 @error('description')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
-            {{-- Năm phát hành & Thời lượng --}}
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
-                <div class="mb-4">
-                    <label for="release_year"
-                        class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1 me-4">Năm phát hành</label>
-                    <input type="number" name="release_year" id="release_year"
-                        value="{{ old('release_year', $movie->release_year) }}" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 
-                               @error('release_year') border-red-500 @enderror
-                               dark:bg-gray-800 text-gray-900 dark:text-white">
+            {{-- Năm phát hành và Thời lượng --}}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="release_year" class="form-label text-white">Năm phát hành</label>
+                    <input type="number" name="release_year" id="release_year" min="1900" max="{{ date('Y') + 5 }}"
+                        value="{{ old('release_year', $movie->release_year) }}"
+                        class="form-control bg-dark text-white @error('release_year') is-invalid @enderror" required>
                     @error('release_year')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
-                <div>
-                    <label for="duration" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1 me-4">Thời
-                        lượng (phút)</label>
-                    <input type="number" name="duration" id="duration" value="{{ old('duration', $movie->duration) }}"
-                        class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 
-                               @error('duration') border-red-500 @enderror
-                               dark:bg-gray-800 text-gray-900 dark:text-white">
+                <div class="col-md-6 mb-3">
+                    <label for="duration" class="form-label text-white">Thời lượng (phút)</label>
+                    <input type="number" name="duration" id="duration" min="1" max="999"
+                        value="{{ old('duration', $movie->duration) }}"
+                        class="form-control bg-dark text-white @error('duration') is-invalid @enderror" required>
                     @error('duration')
-                    <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
+                    <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
 
             {{-- Thể loại --}}
-            <div class="space-y-2 mb-4">
-                <label for="category_id" class="block text-sm font-semibold text-gray-700 me-4">Thể loại</label>
-                <select name="category_id" id="category_id"
-                    class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500 @error('category_id') border-red-500 @enderror">
-                    <option value="">-- Chọn thể loại --</option>
+            <div class="mb-3">
+                <label for="category_id" class="form-label text-white">Thể loại</label>
+                <select name="categories[]" id="category_id" class="form-select bg-dark text-white" multiple required>
                     @foreach($categories as $category)
-                    <option value="{{ $category->id }}" {{ old('category_id') == $category->id ? 'selected' : '' }}>
+                    <option value="{{ $category->id }}"
+                        {{ in_array($category->id, old('categories', $movie->categories->pluck('id')->toArray())) ? 'selected' : '' }}>
                         {{ $category->name }}
                     </option>
                     @endforeach
                 </select>
-                @error('category_id')
-                <p class="text-sm text-red-600">{{ $message }}</p>
+                @error('categories')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- Loại phim --}}
+            <div class="mb-3">
+                <label class="form-label text-white">Loại phim <span class="text-danger">*</span></label>
+                <div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="type" id="single" value="single"
+                            {{ old('type', $movie->type) === 'single' ? 'checked' : '' }} required>
+                        <label class="form-check-label text-white" for="single">Phim lẻ</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="type" id="series" value="series"
+                            {{ old('type', $movie->type) === 'series' ? 'checked' : '' }}>
+                        <label class="form-check-label text-white" for="series">Phim bộ</label>
+                    </div>
+                </div>
+                @error('type')
+                <div class="invalid-feedback d-block">{{ $message }}</div>
+                @enderror
+            </div>
+
+            {{-- Quốc gia --}}
+            <div class="mb-3">
+                <label for="country_id" class="form-label text-white">Quốc gia</label>
+                <select name="country_id" id="country_id"
+                    class="form-select bg-dark text-white @error('country_id') is-invalid @enderror" required>
+                    <option value="">-- Chọn quốc gia --</option>
+                    @foreach($countries as $country)
+                    <option value="{{ $country->id }}"
+                        {{ old('country_id', $movie->country_id) == $country->id ? 'selected' : '' }}>
+                        {{ $country->name }}
+                    </option>
+                    @endforeach
+                </select>
+                @error('country_id')
+                <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
             {{-- Poster --}}
-            <div class="mb-4">
-                <label for="poster"
-                    class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1 me-4">Poster</label>
+            <div class="mb-3">
+                <label for="poster" class="form-label text-white">Poster</label>
                 @if($movie->poster_path)
-                <div class="mb-3">
-                    <img src="{{ asset('storage/' . $movie->poster_path) }}" alt="{{ $movie->title }}"
-                        class="w-32 h-48 object-cover rounded-xl shadow-md">
-                </div>
-                @endif
-                <input type="file" name="poster" id="poster" accept="image/*" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
-                           @error('poster') border-red-500 @enderror
-                           dark:bg-gray-800 text-gray-900 dark:text-white">
-                @error('poster')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            {{-- Video --}}
-            <div class="mb-4">
-                <label for="video"
-                    class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">Video trailer</label>
-                @if($movie->video_path)
-                <div class="mb-3">
-                    <video controls class="w-full rounded-xl">
-                        <source src="{{ asset('storage/' . $movie->video_path) }}" type="video/mp4">
-                        Trình duyệt không hỗ trợ video.
-                    </video>
-                </div>
-                @endif
-                <input type="file" name="video" id="video" accept="video/mp4" class="w-full px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
-                           @error('video') border-red-500 @enderror
-                           dark:bg-gray-800 text-gray-900 dark:text-white">
-                @error('video')
-                <p class="text-sm text-red-600 mt-1">{{ $message }}</p>
-                @enderror
-            </div>
-
-            {{-- Tập phim --}}
-            <div class="mb-6">
-                <label for="episodes" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Đăng tải tập phim</label>
-
-                <div id="episode-list" class="space-y-4">
-                    <div class="flex items-center gap-4">
-                        <input type="text" name="episode_titles[]" placeholder="Tên tập phim"
-                            class="w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
-                                dark:bg-gray-800 text-gray-900 dark:text-white">
-                        <input type="file" name="episode_files[]" accept="video/mp4"
-                            class="w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
-                                dark:bg-gray-800 text-gray-900 dark:text-white">
+                @php
+                $posterUrl = Str::startsWith($movie->poster_path, ['http://', 'https://'])
+                ? $movie->poster_path
+                : asset('storage/' . $movie->poster_path);
+                @endphp
+                <div class="mb-2">
+                    <img src="{{ $posterUrl }}" alt="{{ $movie->title }}" class="img-thumbnail" style="width: 150px;">
+                    <div class="form-check mt-2">
+                        <input type="hidden" name="remove_poster" value="0">
+                        <input class="form-check-input" type="checkbox" name="remove_poster" id="remove_poster" value="1" {{ old('remove_poster') ? 'checked' : '' }}>
+                        <label class="form-check-label text-white" for="remove_poster">
+                            Xóa poster hiện tại
+                        </label>
                     </div>
                 </div>
-
-                <button type="button" id="add-episode"
-                    class="mt-3 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition">
-                    + Thêm tập mới
-                </button>
+                @endif
+                <input type="file" name="poster" id="poster"
+                    class="form-control bg-dark text-white @error('poster') is-invalid @enderror"
+                    accept="image/jpeg,image/png,image/webp">
+                <small class="text-muted">Chỉ chấp nhận file ảnh (JPEG, PNG, WEBP), tối đa 5MB</small>
+                @error('poster')
+                <div class="invalid-feedback">{{ $message }}</div>
+                @enderror
             </div>
 
-
-            {{-- Nút --}}
-            <div class="flex justify-end gap-4 pt-4 border-t mt-3 me-4 mb-4">
-                <a href="{{ route('movies.show', $movie) }}"
-                    class="inline-block px-4 py-2 text-gray-600 text-decoration-none hover:text-blue-600 hover:underline transition duration-150">
-                    Hủy
-                </a>
-                <button type=" submit"
-                    class="btn inline-block px-6 py-2 bg-blue-600 text-white font-medium rounded-lg shadow hover:bg-blue-700 transition duration-150"
-                    style="background: linear-gradient(90deg, #f94ca4, #f14668);">
-                    Update
-                </button>
+            {{-- Nút hành động --}}
+            <div class="d-flex justify-content-between pt-4 border-top border-secondary mt-3">
+                <a href="{{ route('movies.index') }}" class="btn btn-secondary">Hủy</a>
+                <button type="submit" class="btn btn-primary"
+                    style="background: linear-gradient(90deg, #f94ca4, #f14668); border: none;">Cập nhật phim</button>
+                <a href="{{ route('movies.show', $movie) }}" class="btn btn-info">Xem chi tiết</a>
             </div>
         </form>
+
+        @if($movie->type === 'series')
+            <div class="card my-4">
+                <div class="card-header">Danh sách tập phim</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-dark table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Tập</th>
+                                    <th>Tiêu đề</th>
+                                    <th>Thời lượng</th>
+                                    <th>Trạng thái</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach($movie->episodes()->orderBy('episode_number')->get() as $episode)
+                                <tr>
+                                    <td>{{ $episode->episode_number }}</td>
+                                    <td>{{ $episode->title }}</td>
+                                    <td>{{ $episode->duration }} phút</td>
+                                    <td>
+                                        <span class="badge {{ $episode->status === 'published' ? 'bg-success' : 'bg-warning' }}">
+                                            {{ $episode->status === 'published' ? 'Công khai' : 'Nháp' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <form action="{{ route('episodes.destroy', ['movie' => $movie->id, 'episode' => $episode->id]) }}" 
+                                              method="POST" 
+                                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa tập phim này?');"
+                                              class="d-inline">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card my-4">
+                <div class="card-header">Thêm tập phim mới</div>
+                <div class="card-body">
+                    <form action="{{ route('episodes.store', $movie) }}" method="POST" enctype="multipart/form-data">
+                        @csrf
+                        <div class="mb-2">
+                            <label for="episode_number" class="form-label">Số tập</label>
+                            <input type="number" name="episode_number" id="episode_number" class="form-control" required min="1">
+                        </div>
+                        <div class="mb-2">
+                            <label for="title" class="form-label">Tiêu đề tập (tuỳ chọn)</label>
+                            <input type="text" name="title" id="title" class="form-control">
+                        </div>
+                        <div class="mb-2">
+                            <label for="description" class="form-label">Mô tả (tuỳ chọn)</label>
+                            <textarea name="description" id="description" class="form-control"></textarea>
+                        </div>
+                        <div class="mb-2">
+                            <label for="video" class="form-label">File video</label>
+                            <input type="file" name="video" id="video" class="form-control" accept="video/mp4,video/webm" required>
+                        </div>
+                        <div class="mb-2">
+                            <label for="thumbnail" class="form-label">Ảnh thumbnail (tuỳ chọn)</label>
+                            <input type="file" name="thumbnail" id="thumbnail" class="form-control" accept="image/jpeg,image/png,image/webp">
+                        </div>
+                        <div class="mb-2">
+                            <label for="duration" class="form-label">Thời lượng (phút, tuỳ chọn)</label>
+                            <input type="number" name="duration" id="duration" class="form-control" min="0">
+                        </div>
+                        <div class="mb-2">
+                            <label for="status" class="form-label">Trạng thái</label>
+                            <select name="status" id="status" class="form-select">
+                                <option value="published">Công khai</option>
+                                <option value="draft">Nháp</option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Thêm tập</button>
+                    </form>
+                </div>
+            </div>
+        @endif
     </div>
-    @push('scripts')
-<script>
-    document.getElementById('add-episode').addEventListener('click', function () {
-        const list = document.getElementById('episode-list');
-
-        const item = document.createElement('div');
-        item.className = 'flex items-center gap-4';
-
-        item.innerHTML = `
-            <input type="text" name="episode_titles[]" placeholder="Tên tập phim"
-                class="w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
-                       dark:bg-gray-800 text-gray-900 dark:text-white">
-            <input type="file" name="episode_files[]" accept="video/mp4"
-                class="w-1/2 px-4 py-2 border rounded-lg shadow-sm focus:ring-2 focus:ring-blue-500
-                       dark:bg-gray-800 text-gray-900 dark:text-white">
-        `;
-
-        list.appendChild(item);
-    });
-</script>
-@endpush
 </div>
 @endsection
+
+@push('styles')
+<style>
+.form-control,
+.form-select {
+    border-color: #495057;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: #1e1e2e;
+    color: white;
+    border-color: #f94ca4;
+    box-shadow: 0 0 0 0.25rem rgba(249, 76, 164, 0.25);
+}
+
+.list-group-item {
+    border-color: #495057;
+}
+</style>
+@endpush
+
+@push('scripts')
+@vite(['resources/js/edit-movie.js'])
+@endpush

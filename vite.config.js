@@ -7,12 +7,16 @@ export default defineConfig({
             input: [
                 'resources/css/app.css',
                 'resources/js/app.js',
-                'resources/css/navbar.css',
-                'resources/js/navbar.js',
-                'resources/css/welcome.css',
-                'resources/js/welcome.js'
+                'resources/js/welcome.js',
+                'resources/js/edit-movie.js'
             ],
             refresh: true,
         }),
     ],
+    server: {
+        host: '0.0.0.0',
+        hmr: {
+            host: 'localhost'
+        },
+    },
 });

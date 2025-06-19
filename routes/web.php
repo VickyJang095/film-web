@@ -31,6 +31,9 @@ Route::get('/search', [MovieController::class, 'search'])->name('search');
 Route::get('/movies/latest', [MovieController::class, 'latest'])->name('movies.latest');
 Route::get('/category/{slug}', [CategoryController::class, 'show'])->name('category.show');
 Route::get('/country/{slug}', [CountryController::class, 'show'])->name('country.show');
+Route::get('/countries', [CountryController::class, 'index'])->name('countries.index');
+Route::post('/movies/{movie}/rate', [MovieController::class, 'rate'])->name('movies.rate')->middleware('auth');
+Route::post('/movies/{movie}/episodes', [App\Http\Controllers\EpisodeController::class, 'store'])->name('episodes.store');
 
 
 // Routes cho người dùng đã đăng nhập (ngoại trừ dashboard)
@@ -39,6 +42,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile/avatar', [ProfileController::class, 'updateAvatar'])->name('profile.update-avatar');
 
     // Routes cho phim
     Route::get('/movies', [MovieController::class, 'index'])->name('movies.index');
@@ -46,7 +50,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/movies/{movie:slug}/episodes/{episode}', [EpisodeController::class, 'show'])->name('episode.show');
 
     // Routes cho bình luận
-    Route::post('/movies/{movie}/comments', [CommentController::class, 'store'])->name('comments.store');
+    Route::post('/movies/{movie}/comments', [App\Http\Controllers\CommentController::class, 'store'])->name('comments.store')->middleware('auth');
     Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 });
 
@@ -60,6 +64,7 @@ Route::middleware(['auth', 'role:admin'])->prefix('admin')->group(function () {
     Route::get('/movies/{movie}/edit', [MovieController::class, 'edit'])->name('movies.edit');
     Route::put('/movies/{movie}', [MovieController::class, 'update'])->name('movies.update');
     Route::delete('/movies/{movie}', [MovieController::class, 'destroy'])->name('movies.destroy');
+    Route::delete('/movies/{movie}/episodes/{episode}', [EpisodeController::class, 'destroy'])->name('episodes.destroy');
 });
 
 // Nếu bạn muốn dashboard không ở trong prefix /admin, bạn có thể tạo route riêng như sau:

@@ -2,7 +2,8 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-    <meta charset="utf-8" />
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Language" content="vi">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="csrf-token" content="{{ csrf_token() }}" />
 
@@ -12,6 +13,7 @@
     <link rel="preconnect" href="https://fonts.bunny.net"/>
     <link href="https://fonts.bunny.net/css?family=instrument-sans:400,500,600" rel="stylesheet" />
 
+
     <!-- Swiper.js -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
@@ -20,6 +22,7 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     @vite(['resources/css/navbar.css', 'resources/js/navbar.js'])
     @vite(['resources/css/welcome.css', 'resources/js/welcome.js'])
+    @vite(['resources/js/edit-movie.js'])
 
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" />
@@ -31,7 +34,7 @@
     body {
         background-color: #121212;
         color: white;
-        font-family: 'instrument-sans', sans-serif;
+        font-family: 'figtree', sans-serif;
     }
 
     .background-transparent {
@@ -85,9 +88,10 @@
 
 
     <!-- Bootstrap JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
     <!-- Swiper.js -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js" defer></script>
+    @stack('scripts')
 </body>
 
 </html>
