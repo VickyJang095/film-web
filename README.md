@@ -1,65 +1,181 @@
-<<<<<<< HEAD
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Film Web - Quản Lý Phim Laravel
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+## Giới thiệu
 
-## About Laravel
+**Film Web** là một ứng dụng web quản lý phim được xây dựng bằng Laravel.  
+Dự án hỗ trợ các chức năng quản lý phim, thể loại, người dùng, bình luận, đánh giá, và nhiều tính năng mở rộng khác.  
+Giao diện thân thiện, dễ sử dụng, phù hợp cho cả người quản trị và người dùng cuối.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+**Developer:** Hoàng Thị Minh Ngọc    **Mã SV:** 23010669
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+---
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Tính năng chính
 
-## Learning Laravel
+- **Quản lý phim**: Thêm, sửa, xóa, cập nhật thông tin phim.
+- **Quản lý thể loại phim**, phân loại theo nhiều tiêu chí.
+- **Quản lý người dùng**, phân quyền (admin, user).
+- **Đánh giá** và **bình luận phim**.
+- **Tìm kiếm**, lọc phim theo tên, thể loại, năm phát hành, v.v.
+- **Upload** poster, trailer, tập phim.
+- Hệ thống xác thực, bảo mật **CSRF**.
+- **Hỗ trợ seed dữ liệu mẫu** cho phát triển nhanh.
+- **Tích hợp Vite**, hỗ trợ **Hot Reload** khi phát triển.
+- **Responsive UI**, tối ưu cho cả desktop và mobile.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## Ghi chú:
+- Test API bằng **Postman**
+- Liên kết với database của **Aiven**
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+---
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+## Sơ đồ UML khối
 
-## Laravel Sponsors
+![image](https://github.com/user-attachments/assets/e07b8b87-e4e5-4842-895a-1a45e0fc1d00)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+**Giải thích:**
 
-### Premium Partners
+1. Routes định tuyến yêu cầu đến Controller.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+2. Controllers xử lý logic HTTP, thường gọi tới Model hoặc Service.
 
-## Contributing
+3. Models/Eloquent tương tác trực tiếp với CSDL.
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+4. Views (Blade) là tầng trình bày.
 
-## Code of Conduct
+5. Nếu dự án có thêm lớp Service/Repository, sẽ nằm giữa controller và model để tách biệt logic nghiệp vụ.
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+---
 
-## Security Vulnerabilities
+# Sơ đồ UML chức năng - Usecase
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+![ZLB12XCn5BpdAuQUBDZsBgLKyU1LLF0QT-CcR99Tis-58fvwyAeV87JnLbhmQejuIF4_za_Sq59qJPVU0ZFp9c_cBIlYZcgZcHPl2LJ0gKmIKkL4GggmhCgLBRdZ1YLFSfw95xJI0W7cDjE2CPvGuV0uDSfUtgyguHYxKZ1wrXu_WMHx_68plAlRmpSBxN-YbCgCy841G11XCi](https://github.com/user-attachments/assets/a2afb6cd-f1e4-4896-8e9f-f7422bc9c88a)
 
-## License
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
-=======
-# film-web
->>>>>>> 79edbed7b7f51ddf13a8c4d31bb471d81751c430
+---
+
+## Sơ đồ ERD
+![Untitled](https://github.com/user-attachments/assets/d0541f63-56df-4fd6-b0af-d6c29b5c4f0c)
+
+---
+
+## Lớp trọng điểm
+
+| **Lớp**         | **Vai trò chính**                                                                 |
+|------------------|------------------------------------------------------------------------------------|
+| `Movie`          | Lõi của hệ thống – quản lý thông tin phim, liên kết với thể loại, quốc gia, tập, đánh giá, bình luận |
+| `Category`       | Quản lý thể loại phim, liên kết nhiều-nhiều với `Movie` (nếu áp dụng pivot table) |
+| `User`           | Quản lý tài khoản người dùng, phân quyền, xác thực đăng nhập                     |
+| `Episode`        | Đại diện cho từng tập của phim (phim nhiều tập)                                  |
+| `Rating`         | Lưu điểm đánh giá phim từ người dùng                                             |
+| `Comment`        | Quản lý bình luận người dùng về từng phim                                        |
+| `Country`        | Xác định quốc gia sản xuất của phim                                              |
+
+---
+
+## Các Controller chính
+
+| **Controller**       | **Vị trí / Đường dẫn**                        | **Chức năng chính**                                                      |
+|----------------------|-----------------------------------------------|---------------------------------------------------------------------------|
+| `MovieController`    | `app/Http/Controllers/MovieController.php`    | Quản lý CRUD phim, upload poster/trailer, xử lý chi tiết phim           |
+| `CategoryController` | `app/Http/Controllers/CategoryController.php` | Quản lý danh sách, thêm/xóa/sửa thể loại phim                            |
+| `UserController`     | `app/Http/Controllers/UserController.php`     | Quản lý người dùng, phân quyền, truy xuất dữ liệu user                   |
+| `EpisodeController`  | `app/Http/Controllers/EpisodeController.php`  | Quản lý các tập phim theo từng `Movie` (phim nhiều tập)                  |
+| `RatingController`   | `app/Http/Controllers/RatingController.php`   | Xử lý chấm điểm đánh giá phim từ người dùng                              |
+| `CommentController`  | `app/Http/Controllers/CommentController.php`  | Xử lý tạo/sửa/xóa bình luận cho từng phim                                |
+| `CountryController`  | `app/Http/Controllers/CountryController.php`  | Quản lý quốc gia sản xuất phim                                            |
+
+---
+
+### Công Nghệ
+| **Công nghệ**                | **Vai trò**                                                                 |
+|--------------------------|-------------------------------------------------------------------------|
+| Laravel                  | Framework PHP, xây dựng backend, xử lý logic, routing, auth, migration  |
+| PHP                      | Ngôn ngữ lập trình phía server, nền tảng backend                        |
+| MySQL/MariaDB            | Hệ quản trị cơ sở dữ liệu, lưu trữ dữ liệu                              |
+| Vite                     | Build, quản lý tài nguyên (JS/CSS), hot reload, tối ưu asset frontend   |
+| Node.js & npm            | Cài đặt, quản lý package frontend, build asset với Vite                 |
+| Blade Template Engine     | Engine template Laravel, xây dựng giao diện phía server                 |
+| JavaScript (ES6+)        | Xử lý tương tác động, validate form, hiệu ứng, AJAX                    |
+| HTML5 & CSS3             | Xây dựng cấu trúc và định dạng giao diện web                            |
+| Bootstrap/Tailwind CSS   | Framework CSS, thiết kế giao diện responsive, hiện đại                  |
+| WebSocket (Pusher, Echo) | Giao tiếp thời gian thực giữa client và server (realtime)               |
+| Composer                 | Quản lý thư viện PHP, cài đặt package Laravel                           |
+| Git                      | Quản lý mã nguồn, làm việc nhóm, theo dõi lịch sử thay đổi              |
+
+---
+## Cài đặt
+
+### Yêu cầu hệ thống
+
+- PHP >= 8.1
+- Composer
+- Node.js & npm
+- MySQL / MariaDB / SQLite
+- Laravel 10+
+
+### Các bước cài đặt
+
+```bash
+# 1. Clone dự án
+git clone https://github.com/your-username/film-web.git
+cd film-web
+
+# 2. Cài đặt các package PHP
+composer install
+
+# 3. Cài đặt các gói npm
+npm install && npm run dev
+
+# 4. Tạo file .env
+cp .env.example .env
+
+# 5. Tạo key ứng dụng
+php artisan key:generate
+
+# 6. Thiết lập cơ sở dữ liệu trong .env
+
+# 7. Chạy migration và seed dữ liệu mẫu
+php artisan migrate --seed
+
+# 8. Khởi động server
+php artisan serve
+```
+
+##  Một số lưu ý khi phát triển
+
+- Khi thay đổi asset (JS/CSS), cần chạy lại `npm run build` hoặc `npm run dev`.
+- Nếu gặp lỗi asset Vite (`manifest not found`), hãy xóa cache Laravel bằng:
+  ```bash
+  php artisan optimize:clear
+  ```
+
+## Ghi chú
+**Tài khoản admin:**
+- Admin: admin@example.com / password
+- User: user@example.com / password
+**Tích hợp:** Laravel Breeze + Sanctum (xác thực), Bootstrap (UI)
+
+## Cấu trúc thư mục
+```bash
+film-web/
+├── app/
+├── bootstrap/
+├── config/
+├── database/
+│   ├── migrations/
+│   └── seeders/
+├── public/
+│   └── .htaccess
+├── resources/
+│   ├── js/
+│   └── views/
+├── routes/
+│   └── web.php
+├── storage/
+├── tests/
+├── vite.config.js
+└── ...
+```
+### Liên hệ
+- Gmail: hoangminhngoc.tnhp@gmail.com
