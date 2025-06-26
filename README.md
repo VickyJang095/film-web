@@ -58,6 +58,15 @@ Giao diện thân thiện, dễ sử dụng, phù hợp cho cả người quản
 ![Untitled](https://github.com/user-attachments/assets/d0541f63-56df-4fd6-b0af-d6c29b5c4f0c)
 
 ---
+## Sơ đồ cấu trúc 
+
+![image](https://github.com/user-attachments/assets/791c6f02-9795-466e-95ea-bb3fe9e6e333)
+
+
+## Sơ đồ thuật toán
+VD: Hiển thị phim theo thể loại
+
+![image](https://github.com/user-attachments/assets/96eb62b9-36ef-4713-9517-dfeb901c7181)
 
 ## Lớp trọng điểm
 
@@ -86,6 +95,187 @@ Giao diện thân thiện, dễ sử dụng, phù hợp cho cả người quản
 | `CountryController`  | `app/Http/Controllers/CountryController.php`  | Quản lý quốc gia sản xuất phim                                            |
 
 ---
+## Chức năng chính của dự án
+
+- CRUD phim
+
+<img width="400" alt="demo" src="https://github.com/user-attachments/assets/45da2a85-2559-4c0f-a302-4707b51a2f50" />
+
+<img width="402" alt="demo1" src="https://github.com/user-attachments/assets/866031ed-623d-4335-989b-234f8091c0fa" />
+
+<img width="403" alt="demo2" src="https://github.com/user-attachments/assets/a8f8ae5c-09e6-43e9-9903-e76df5d59d72" />
+
+ UPDATE 
+
+<img width="319" alt="demo3" src="https://github.com/user-attachments/assets/e383977d-ad9c-4663-8e4e-bdf26aedbf89" /> 
+
+CREATE
+
+<img width="912" alt="demo4" src="https://github.com/user-attachments/assets/c762edc7-43b9-420a-a5ab-c24177e8de97" /> 
+
+DELETE & READ
+
+ ## Code minh họa MovieController
+ ```bash
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Movie;
+use App\Models\Category;
+use App\Models\Country;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
+use App\Models\Episode;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use App\Http\Requests\UpdateMovieRequest;
+
+class MovieController extends Controller
+{
+    public function index()
+    {
+        $movies = Movie::with('categories')->latest()->paginate(12);
+        return view('movies.index', compact('movies'));
+    }
+
+    public function show(Movie $movie)
+    {
+        // Tăng lượt xem mỗi lần vào trang chi tiết
+        $movie->increment('views');
+
+        $movie->load(['categories', 'comments.user', 'country', 'episodeList']);
+        $relatedMovies = Movie::whereHas('categories', function($q) use ($movie) {
+            return $q->whereIn('categories.id', $movie->categories->pluck('id'));
+        })
+        ->where('id', '!=', $movie->id)
+        ->latest()
+        ->take(12)
+        ->get();        
+        return view('movies.show', compact('movie', 'relatedMovies'));
+    }
+
+    public function create()
+    {
+        $categories = Category::all();
+        $countries = Country::all();    
+        return view('movies.create', compact('categories', 'countries'));
+    }
+
+    public function store(Request $request)
+    {
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'required|string',
+            'release_year' => 'required|integer|min:1900|max:' . (date('Y') + 1),
+            'duration' => 'required|integer|min:1',
+            'poster' => 'nullable|image|mimes:jpeg,png,jpg,webp|max:2048',
+            'video' => 'nullable|file|mimes:mp4|max:102400',
+            'category_ids' => 'required|array',
+            'category_ids.*' => 'exists:categories,id',
+            'country_id' => 'required|exists:countries,id',
+            'type' => 'required|in:single,series',
+            'episode_count' => 'required_if:type,series|nullable|integer|min:1',
+        ]);
+
+        if ($request->hasFile('poster')) {
+            $validated['poster_path'] = $request->file('poster')->store('posters', 'public');
+        }
+
+        if ($request->hasFile('video')) {
+            $validated['video_path'] = $request->file('video')->store('videos', 'public');
+        }
+
+        $movie = Movie::create([
+            'title' => $validated['title'],
+            'slug' => Str::slug($validated['title']),
+            'description' => $validated['description'],
+            'release_year' => $validated['release_year'],
+            'duration' => $validated['duration'],
+            'poster_path' => $validated['poster_path'] ?? null,
+            'video_path' => $validated['video_path'] ?? null,
+            'country_id' => $validated['country_id'],
+            'status' => 'published'
+        ]);
+
+        // Gán thể loại
+        $movie->categories()->attach($validated['category_ids']);
+
+        return redirect()->route('movies.show', $movie)
+            ->with('success', 'Phim đã được thêm thành công.');
+    }
+
+    public function edit(Movie $movie)
+    {
+        $categories = Category::all();
+        $countries = Country::all();
+        return view('movies.edit', compact('movie', 'categories', 'countries'));
+    }
+
+    public function update(UpdateMovieRequest $request, Movie $movie)
+    {
+        Log::info('Update movie request data:', $request->all());
+        
+        $data = $request->validated();
+        Log::info('Validated data:', $data);
+        Log::info('Current movie type:', ['type' => $movie->type]);
+        Log::info('New type value:', ['type' => $data['type']]);
+        
+        // Xử lý poster
+        if ($request->hasFile('poster')) {
+            if ($movie->poster_path) {
+                Storage::disk('public')->delete($movie->poster_path);
+            }
+            $data['poster_path'] = $request->file('poster')->store('posters', 'public');
+        } elseif ($request->input('remove_poster') === '1') {
+            if ($movie->poster_path) {
+                Storage::disk('public')->delete($movie->poster_path);
+            }
+            $data['poster_path'] = null;
+        }
+
+        // Cập nhật slug nếu title thay đổi
+        if ($movie->title !== $data['title']) {
+            $data['slug'] = Str::slug($data['title']);
+        }
+
+        // Cập nhật thông tin phim
+        $movie->update($data);
+        Log::info('Movie updated:', $movie->toArray());
+
+        // Cập nhật thể loại
+        if (isset($data['categories'])) {
+            $movie->categories()->sync($data['categories']);
+            Log::info('Categories synced:', $data['categories']);
+        }
+
+        return redirect()->route('movies.show', $movie)
+            ->with('success', 'Phim đã được cập nhật thành công.');
+    }
+    
+
+    public function destroy(Movie $movie)
+    {
+        if ($movie->poster_path) {
+            Storage::disk('public')->delete($movie->poster_path);
+        }
+        if ($movie->video_path) {
+            Storage::disk('public')->delete($movie->video_path);
+        }
+
+        $movie->delete();
+
+        return redirect()->route('movies.index')
+            ->with('success', 'Phim đã được xóa thành công.');
+    }
+}
+```
+
+### Link
+- Link repo: https://github.com/VickyJang095/film-web.git
+- Link demo:
+- Link web public:
 
 ### Công Nghệ
 | **Công nghệ**                | **Vai trò**                                                                 |
@@ -154,6 +344,7 @@ php artisan serve
 **Tài khoản admin:**
 - Admin: admin@example.com / password
 - User: user@example.com / password
+  
 **Tích hợp:** Laravel Breeze + Sanctum (xác thực), Bootstrap (UI)
 
 ## Cấu trúc thư mục
