@@ -5,7 +5,8 @@
     <div class="card shadow rounded-lg p-4 mx-auto" style="max-width: 800px; background-color: #1a1a2e;">
         <h3 class="mb-4 text-center text-white fw-bold">Chỉnh sửa phim</h3>
 
-        <form action="{{ route('movies.update', $movie) }}" method="POST" enctype="multipart/form-data" id="update-movie-form">
+        <form action="{{ route('movies.update', $movie) }}" method="POST" enctype="multipart/form-data"
+            id="update-movie-form">
             @csrf
             @method('PUT')
 
@@ -119,7 +120,8 @@
                     <img src="{{ $posterUrl }}" alt="{{ $movie->title }}" class="img-thumbnail" style="width: 150px;">
                     <div class="form-check mt-2">
                         <input type="hidden" name="remove_poster" value="0">
-                        <input class="form-check-input" type="checkbox" name="remove_poster" id="remove_poster" value="1" {{ old('remove_poster') ? 'checked' : '' }}>
+                        <input class="form-check-input" type="checkbox" name="remove_poster" id="remove_poster"
+                            value="1" {{ old('remove_poster') ? 'checked' : '' }}>
                         <label class="form-check-label text-white" for="remove_poster">
                             Xóa poster hiện tại
                         </label>
@@ -145,91 +147,96 @@
         </form>
 
         @if($movie->type === 'series')
-            <div class="card my-4">
-                <div class="card-header">Danh sách tập phim</div>
-                <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-dark table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Tập</th>
-                                    <th>Tiêu đề</th>
-                                    <th>Thời lượng</th>
-                                    <th>Trạng thái</th>
-                                    <th>Thao tác</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach($movie->episodes()->orderBy('episode_number')->get() as $episode)
-                                <tr>
-                                    <td>{{ $episode->episode_number }}</td>
-                                    <td>{{ $episode->title }}</td>
-                                    <td>{{ $episode->duration }} phút</td>
-                                    <td>
-                                        <span class="badge {{ $episode->status === 'published' ? 'bg-success' : 'bg-warning' }}">
-                                            {{ $episode->status === 'published' ? 'Công khai' : 'Nháp' }}
-                                        </span>
-                                    </td>
-                                    <td>
-                                        <form action="{{ route('episodes.destroy', ['movie' => $movie->id, 'episode' => $episode->id]) }}" 
-                                              method="POST" 
-                                              onsubmit="return confirm('Bạn có chắc chắn muốn xóa tập phim này?');"
-                                              class="d-inline">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+        <div class="card my-4">
+            <div class="card-header">Danh sách tập phim</div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover">
+                        <thead>
+                            <tr>
+                                <th>Tập</th>
+                                <th>Tiêu đề</th>
+                                <th>Thời lượng</th>
+                                <th>Trạng thái</th>
+                                <th>Thao tác</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($movie->episodes()->orderBy('episode_number')->get() as $episode)
+                            <tr>
+                                <td>{{ $episode->episode_number }}</td>
+                                <td>{{ $episode->title }}</td>
+                                <td>{{ $episode->duration }} phút</td>
+                                <td>
+                                    <span
+                                        class="badge {{ $episode->status === 'published' ? 'bg-success' : 'bg-warning' }}">
+                                        {{ $episode->status === 'published' ? 'Công khai' : 'Nháp' }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <form
+                                        action="{{ route('episodes.destroy', ['movie' => $movie->id, 'episode' => $episode->id]) }}"
+                                        method="POST"
+                                        onsubmit="return confirm('Bạn có chắc chắn muốn xóa tập phim này?');"
+                                        class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-danger btn-sm">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
 
-            <div class="card my-4">
-                <div class="card-header">Thêm tập phim mới</div>
-                <div class="card-body">
-                    <form action="{{ route('episodes.store', $movie) }}" method="POST" enctype="multipart/form-data">
-                        @csrf
-                        <div class="mb-2">
-                            <label for="episode_number" class="form-label">Số tập</label>
-                            <input type="number" name="episode_number" id="episode_number" class="form-control" required min="1">
-                        </div>
-                        <div class="mb-2">
-                            <label for="title" class="form-label">Tiêu đề tập (tuỳ chọn)</label>
-                            <input type="text" name="title" id="title" class="form-control">
-                        </div>
-                        <div class="mb-2">
-                            <label for="description" class="form-label">Mô tả (tuỳ chọn)</label>
-                            <textarea name="description" id="description" class="form-control"></textarea>
-                        </div>
-                        <div class="mb-2">
-                            <label for="video" class="form-label">File video</label>
-                            <input type="file" name="video" id="video" class="form-control" accept="video/mp4,video/webm" required>
-                        </div>
-                        <div class="mb-2">
-                            <label for="thumbnail" class="form-label">Ảnh thumbnail (tuỳ chọn)</label>
-                            <input type="file" name="thumbnail" id="thumbnail" class="form-control" accept="image/jpeg,image/png,image/webp">
-                        </div>
-                        <div class="mb-2">
-                            <label for="duration" class="form-label">Thời lượng (phút, tuỳ chọn)</label>
-                            <input type="number" name="duration" id="duration" class="form-control" min="0">
-                        </div>
-                        <div class="mb-2">
-                            <label for="status" class="form-label">Trạng thái</label>
-                            <select name="status" id="status" class="form-select">
-                                <option value="published">Công khai</option>
-                                <option value="draft">Nháp</option>
-                            </select>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Thêm tập</button>
-                    </form>
-                </div>
+        <div class="card my-4">
+            <div class="card-header">Thêm tập phim mới</div>
+            <div class="card-body">
+                <form action="{{ route('episodes.store', $movie) }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="mb-2">
+                        <label for="episode_number" class="form-label">Số tập</label>
+                        <input type="number" name="episode_number" id="episode_number" class="form-control" required
+                            min="1">
+                    </div>
+                    <div class="mb-2">
+                        <label for="title" class="form-label">Tiêu đề tập (tuỳ chọn)</label>
+                        <input type="text" name="title" id="title" class="form-control">
+                    </div>
+                    <div class="mb-2">
+                        <label for="description" class="form-label">Mô tả (tuỳ chọn)</label>
+                        <textarea name="description" id="description" class="form-control"></textarea>
+                    </div>
+                    <div class="mb-2">
+                        <label for="video" class="form-label">File video</label>
+                        <input type="file" name="video" id="video" class="form-control" accept="video/mp4,video/webm"
+                            required>
+                    </div>
+                    <div class="mb-2">
+                        <label for="thumbnail" class="form-label">Ảnh thumbnail (tuỳ chọn)</label>
+                        <input type="file" name="thumbnail" id="thumbnail" class="form-control"
+                            accept="image/jpeg,image/png,image/webp">
+                    </div>
+                    <div class="mb-2">
+                        <label for="duration" class="form-label">Thời lượng (phút, tuỳ chọn)</label>
+                        <input type="number" name="duration" id="duration" class="form-control" min="0">
+                    </div>
+                    <div class="mb-2">
+                        <label for="status" class="form-label">Trạng thái</label>
+                        <select name="status" id="status" class="form-select">
+                            <option value="published">Công khai</option>
+                            <option value="draft">Nháp</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary">Thêm tập</button>
+                </form>
             </div>
+        </div>
         @endif
     </div>
 </div>
