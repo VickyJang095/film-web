@@ -77,4 +77,6 @@ Route::middleware(['auth', 'role:admin,editor'])->prefix('manage')->group(functi
     Route::get('/', [ManageController::class, 'index'])->name('manage.index');
 });
 
+Route::get('/', fn() => 'Hello from Railway!');
+
 require __DIR__.'/auth.php';
